@@ -1,0 +1,32 @@
+import { Notification } from "../../Entities/notification";
+import { NotificationsRepository } from "../../Repositories/notifications.repository";
+import { Injectable } from '@nestjs/common/';
+import { NotificationNotFound } from "./notification-not-found";
+
+
+interface CountRecipientNotificationsRequest {
+  recipientId: string;
+}
+
+interface CountRecipientNotificationsResponse {
+  count: number;
+};
+
+@Injectable()
+export class CountRecipientNotifications {
+  constructor(private notificationsRepository: NotificationsRepository) { }
+
+  async execute
+    (request: CountRecipientNotificationsRequest
+    ): Promise<CountRecipientNotificationsResponse> {
+    const { recipientId } = request;
+
+    const count = await this.notificationsRepository.countManyByRecipientId(
+      recipientId,
+    );
+
+    return {
+      count,
+    }
+  }
+}
